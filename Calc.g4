@@ -1,6 +1,7 @@
 grammar Calc;
 
 // Parser rules
+
 start: assignment | arithmeticExpr;
 
 assignment: functionWritingCall ('=' | '+=' | '-=') arithmeticExpr;
@@ -15,7 +16,7 @@ functionWritingCall: ID '(' NUMBER ',' NUMBER ')' | ID | ID '(' NUMBER ':' NUMBE
 
 functionReadingCall: ID '(' NUMBER ',' NUMBER ')';
 
-ID: [a-zA-Z]+; // keyword
+ID: [a-zA-Z_][0-9a-zA-Z_]*; // keyword
 
 REALNUMBER: [0-9]* '.' [0-9]+;
 
