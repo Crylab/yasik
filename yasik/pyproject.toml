@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "yasik"
+version = "0.1.0"
+description = ""
+authors = ["Ruslan Shaiakhmetov <email>"]
+readme = "README.md"
+packages = [{include = "yasik"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+antlr4-python3-runtime = "4.13.1"
+
+[tool.poetry.build]
+generate-setup-file = false
+script = "pre_build.py"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
