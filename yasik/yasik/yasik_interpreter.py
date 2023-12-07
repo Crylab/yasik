@@ -8,20 +8,20 @@ class YasikEvaluator(YasikListener):
         self.param_list = {"lar": (210, 215)}    # Substitute it by function call
         self.variables = []
 
-    # Exit a parse tree produced by CalcParser#code.
-    def exitCode(self, ctx:CalcParser.CodeContext):
+    # Exit a parse tree produced by YasikParser#code.
+    def exitCode(self, ctx:YasikParser.CodeContext):
         print(ctx.getText())
         print("Good morning from exitCode.")
         pass
 
-    # Exit a parse tree produced by CalcParser#start.
-    def exitStart(self, ctx:CalcParser.StartContext):
+    # Exit a parse tree produced by YasikParser#start.
+    def exitStart(self, ctx:YasikParser.StartContext):
         print(ctx.getText())
         print("Good morning from exitStart.")
         pass
 
-    # Exit a parse tree produced by CalcParser#assignment.
-    def exitAssignment(self, ctx:CalcParser.AssignmentContext):
+    # Exit a parse tree produced by YasikParser#assignment.
+    def exitAssignment(self, ctx:YasikParser.AssignmentContext):
         if ctx.getChildCount() == 3:
             left_in = ctx.children[0].getText()
             right = ctx.children[2].getText()+")"
@@ -45,30 +45,30 @@ class YasikEvaluator(YasikListener):
             ctx.children.append(element)
             
 
-    # Exit a parse tree produced by CalcParser#arithmeticExpr.
-    def exitArithmeticExpr(self, ctx:CalcParser.ArithmeticExprContext):
+    # Exit a parse tree produced by YasikParser#arithmeticExpr.
+    def exitArithmeticExpr(self, ctx:YasikParser.ArithmeticExprContext):
         print("Good morning from exitArithmeticExpr.")
         pass
 
-    # Exit a parse tree produced by CalcParser#term.
-    def exitTerm(self, ctx:CalcParser.TermContext):
+    # Exit a parse tree produced by YasikParser#term.
+    def exitTerm(self, ctx:YasikParser.TermContext):
         print("Good morning from exitTerm.")
         pass
 
-    # Exit a parse tree produced by CalcParser#factor.
-    def exitFactor(self, ctx:CalcParser.FactorContext):
+    # Exit a parse tree produced by YasikParser#factor.
+    def exitFactor(self, ctx:YasikParser.FactorContext):
         print("Good morning from exitFactor.")
         pass
     '''
     class MySlice:
-        def __init__(self, subtree: CalcParser.Yasik_sliceContext):
+        def __init__(self, subtree: YasikParser.Yasik_sliceContext):
             self.begin = subtree.
             self.end = end
 
             def __to
 '''
-    # Exit a parse tree produced by CalcParser#yasik_slice.
-    def exitYasik_slice(self, ctx:CalcParser.Yasik_sliceContext):
+    # Exit a parse tree produced by YasikParser#yasik_slice.
+    def exitYasik_slice(self, ctx:YasikParser.Yasik_sliceContext):
 
         def sub(content):
             element = ctx.children[0]
@@ -91,8 +91,8 @@ class YasikEvaluator(YasikListener):
         print("Good morning from exitYasik_slice.")
         pass
 
-    # Exit a parse tree produced by CalcParser#functionCall.
-    def exitFunctionCall(self, ctx:CalcParser.FunctionCallContext):        
+    # Exit a parse tree produced by YasikParser#functionCall.
+    def exitFunctionCall(self, ctx:YasikParser.FunctionCallContext):        
     
         zero_string = "0:1"
 
