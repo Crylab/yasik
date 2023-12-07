@@ -1,3 +1,6 @@
 #!/usr/bin/env python
 import subprocess
-subprocess.run(["./gradlew", "generateGrammarSource"])
+import os
+
+command = "./gradlew" if os.name == "posix" else "gradlew.bat"
+subprocess.run([command, "generateGrammarSource"])

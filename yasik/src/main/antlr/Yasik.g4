@@ -2,19 +2,21 @@ grammar Yasik;
 
 // Parser rules
 
+code: start (';' start)* ';'?;
+
 start: assignment | arithmeticExpr;
 
-assignment: functionCall ('=' | '+=' | '-=') arithmeticExpr;
+assignment: functionCall ('=' | '+=' | '-=' | '*=' | '/=') arithmeticExpr;
 
 arithmeticExpr: term (('+'|'-') term)*;
 
 term: factor (('*'|'/') factor)*;
 
-factor: REALNUMBER | '(' arithmeticExpr ')' | ('-' | '+') factor | functionCall | ID | NUMBER;
+factor: REALNUMBER | '(' arithmeticExpr ')' | ('-' | '+') factor | functionCall | NUMBER;
 
 yasik_slice: NUMBER | NUMBER? ':' NUMBER?;
 
-functionCall: (ID'.')?ID '(' yasik_slice (',' yasik_slice)? ')';
+functionCall: (ID'.')?ID ('(' left=yasik_slice (',' right=yasik_slice)? ')')?;
 
 ID: [a-zA-Z_][0-9a-zA-Z_]*; // keyword
 
