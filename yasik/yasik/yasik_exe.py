@@ -2,6 +2,9 @@
 
 from antlr4 import *
 from yasik_interpreter import YasikEvaluator
+from parser_generated.YasikLexer import YasikLexer
+from parser_generated.YasikParser import YasikParser
+from parser_generated.YasikListener import YasikListener
 
 def main():
     print("Hey!!!!")
@@ -30,7 +33,7 @@ def main():
     #expression = input("Enter an expression: ")
         input_stream = InputStream(expression)
     #lexer = CalcLexer(input_stream)
-        lexer = YasikLexer(input_stream)
+        lexer = YasikLexer(input=input_stream)
         token_stream = CommonTokenStream(lexer)
         parser = YasikParser(token_stream)
         evaluator = YasikEvaluator()
