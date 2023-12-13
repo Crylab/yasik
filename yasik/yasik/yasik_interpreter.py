@@ -1,23 +1,34 @@
 from antlr4 import *
-from parser_generated.YasikLexer import YasikLexer
-from parser_generated.YasikParser import YasikParser
-from parser_generated.YasikListener import YasikListener
+from yasik.parser_generated.YasikLexer import YasikLexer
+from yasik.parser_generated.YasikParser import YasikParser
+from yasik.parser_generated.YasikListener import YasikListener
+from copy import copy
+
+def yasik_compiler(input_str: str) -> str:
+    input_stream = InputStream(input_str)
+    lexer = YasikLexer(input=input_stream)
+    token_stream = CommonTokenStream(lexer)
+    parser = YasikParser(token_stream)
+    evaluator = YasikEvaluator()
+    evaluator.param_list = {"lar": (210, 215)}    # Substitute it by function call
+    parser.addParseListener(evaluator)
+    tree = parser.code()
+    return tree.getText()
+
 
 class YasikEvaluator(YasikListener):
     def __init__(self):
-        self.param_list = {"lar": (210, 215)}    # Substitute it by function call
+        self.param_list = {}
         self.variables = []
+        self.assignmentCycle = {}
 
     # Exit a parse tree produced by YasikParser#code.
     def exitCode(self, ctx:YasikParser.CodeContext):
-        print(ctx.getText())
-        print("Good morning from exitCode.")
-        pass
+        return ctx.getText()
 
-    # Exit a parse tree produced by YasikParser#start.
-    def exitStart(self, ctx:YasikParser.StartContext):
-        print(ctx.getText())
-        print("Good morning from exitStart.")
+    # Exit a parse tree produced by YasikParser#assignment.
+    def enterAssignment(self, ctx:YasikParser.AssignmentContext):
+        print("ciao")
         pass
 
     # Exit a parse tree produced by YasikParser#assignment.
@@ -43,21 +54,17 @@ class YasikEvaluator(YasikListener):
             element.symbol.text = content
             ctx.children.clear()
             ctx.children.append(element)
-            
 
     # Exit a parse tree produced by YasikParser#arithmeticExpr.
     def exitArithmeticExpr(self, ctx:YasikParser.ArithmeticExprContext):
-        print("Good morning from exitArithmeticExpr.")
         pass
 
     # Exit a parse tree produced by YasikParser#term.
     def exitTerm(self, ctx:YasikParser.TermContext):
-        print("Good morning from exitTerm.")
         pass
 
     # Exit a parse tree produced by YasikParser#factor.
     def exitFactor(self, ctx:YasikParser.FactorContext):
-        print("Good morning from exitFactor.")
         pass
     '''
     class MySlice:
@@ -76,8 +83,11 @@ class YasikEvaluator(YasikListener):
             ctx.children.clear()
             ctx.children.append(element)
 
-        if ctx.getChildCount() == 1: # N
-            sub(ctx.children[0].getText()+":"+str(int(ctx.children[0].getText())+1))
+        if ctx.getChildCount() == 1: 
+            if ctx.children[0].getText() == ":": # :
+                sub("0:MAXLIMITKEYWORD")
+            else:  # N
+                sub(ctx.children[0].getText()+":"+str(int(ctx.children[0].getText())+1))
 
         if ctx.getChildCount() == 2:
             if ctx.children[0].getText() == ":": # :N
@@ -87,9 +97,6 @@ class YasikEvaluator(YasikListener):
             
         if ctx.getChildCount() == 3: # N:N
             sub(ctx.children[0].getText()+":"+ctx.children[2].getText())
-
-        print("Good morning from exitYasik_slice.")
-        pass
 
     # Exit a parse tree produced by YasikParser#functionCall.
     def exitFunctionCall(self, ctx:YasikParser.FunctionCallContext):        
@@ -127,5 +134,6 @@ class YasikEvaluator(YasikListener):
 
         if ctx.getChildCount() == 8: # category.param(Slice, Slice)
             sub(ctx.children[2].getText(), ctx.children[4].getText(), ctx.children[6].getText(), prefix=ctx.children[0].getText()+".") 
+    
         
             

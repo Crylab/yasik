@@ -6,7 +6,8 @@ code: start (';' start)* ';'?;
 
 start: assignment | arithmeticExpr;
 
-assignment: functionCall ('=' | '+=' | '-=' | '*=' | '/=') arithmeticExpr;
+assignment
+    : left=functionCall assignmentType=('=' | '+=' | '-=' | '*=' | '/=') right=arithmeticExpr;
 
 arithmeticExpr: term (('+'|'-') term)*;
 

@@ -2,13 +2,15 @@
 name = "yasik"
 version = "0.1.0"
 description = ""
-authors = ["Ruslan Shaiakhmetov <email>"]
+authors = ["Ruslan Shaiakhmetov <ruslan.shaiakhmetov@unibo.it>"]
 readme = "README.md"
 packages = [{include = "yasik"}]
 
 [tool.poetry.dependencies]
 python = "^3.9.13"
 antlr4-python3-runtime = "4.13.1"
+treelib = "^1.7.0"
+pytest = "^7.4.3"
 
 [tool.poetry.build]
 generate-setup-file = false
