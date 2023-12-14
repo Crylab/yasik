@@ -1,0 +1,84 @@
+test_sequence_reading_one_slice:
+  var:                  var
+  var1:                 var1
+  # Without slices
+  lar:                  self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+  # With one slice
+  lar(5):               self.xmlManager.xmlMetaReading(xml, 'lar', '(5:6, 0:1)')
+  lar(5:16):            self.xmlManager.xmlMetaReading(xml, 'lar', '(5:16, 0:1)')
+  lar(5:):              self.xmlManager.xmlMetaReading(xml, 'lar', '(5:210, 0:1)')
+  lar(:5):              self.xmlManager.xmlMetaReading(xml, 'lar', '(0:5, 0:1)')
+  lar(:):               self.xmlManager.xmlMetaReading(xml, 'lar', '(0:210, 0:1)')
+
+  # The same with category
+  cat.lar:              self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(0:1, 0:1)')
+  cat.lar(5):           self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:6, 0:1)')
+  cat.lar(5:16):        self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:16, 0:1)')
+  cat.lar(5:):          self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:210, 0:1)')
+  cat.lar(:5):          self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(0:5, 0:1)')
+  cat.lar(:):           self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(0:210, 0:1)')
+
+test_sequence_reading_two_slices_without_category:
+   # With two slices
+  lar(5, 6):            self.xmlManager.xmlMetaReading(xml, 'lar', '(5:6, 6:7)')
+  lar(5, 6:16):         self.xmlManager.xmlMetaReading(xml, 'lar', '(5:6, 6:16)')
+  lar(5, 6:):           self.xmlManager.xmlMetaReading(xml, 'lar', '(5:6, 6:215)')
+  lar(5, :16):          self.xmlManager.xmlMetaReading(xml, 'lar', '(5:6, 0:16)')
+  lar(5, :):            self.xmlManager.xmlMetaReading(xml, 'lar', '(5:6, 0:215)')
+
+  lar(5:16, 6):         self.xmlManager.xmlMetaReading(xml, 'lar', '(5:16, 6:7)')
+  lar(5:16, 6:16):      self.xmlManager.xmlMetaReading(xml, 'lar', '(5:16, 6:16)')
+  lar(5:16, 6:):        self.xmlManager.xmlMetaReading(xml, 'lar', '(5:16, 6:215)')
+  lar(5:16, :16):       self.xmlManager.xmlMetaReading(xml, 'lar', '(5:16, 0:16)')
+  lar(5:16, :):         self.xmlManager.xmlMetaReading(xml, 'lar', '(5:16, 0:215)')
+  
+  lar(5:, 6):           self.xmlManager.xmlMetaReading(xml, 'lar', '(5:210, 6:7)')
+  lar(5:, 6:16):        self.xmlManager.xmlMetaReading(xml, 'lar', '(5:210, 6:16)')
+  lar(5:, 6:):          self.xmlManager.xmlMetaReading(xml, 'lar', '(5:210, 6:215)')
+  lar(5:, :16):         self.xmlManager.xmlMetaReading(xml, 'lar', '(5:210, 0:16)')
+  lar(5:, :):           self.xmlManager.xmlMetaReading(xml, 'lar', '(5:210, 0:215)')
+
+  lar(:6, 6):           self.xmlManager.xmlMetaReading(xml, 'lar', '(0:6, 6:7)')
+  lar(:6, 6:16):        self.xmlManager.xmlMetaReading(xml, 'lar', '(0:6, 6:16)')
+  lar(:6, 6:):          self.xmlManager.xmlMetaReading(xml, 'lar', '(0:6, 6:215)')
+  lar(:6, :16):         self.xmlManager.xmlMetaReading(xml, 'lar', '(0:6, 0:16)')
+  lar(:6, :):           self.xmlManager.xmlMetaReading(xml, 'lar', '(0:6, 0:215)')
+  lar(:, 6):            self.xmlManager.xmlMetaReading(xml, 'lar', '(0:210, 6:7)')
+  lar(:, 6:16):         self.xmlManager.xmlMetaReading(xml, 'lar', '(0:210, 6:16)')
+  lar(:, 6:):           self.xmlManager.xmlMetaReading(xml, 'lar', '(0:210, 6:215)')
+  lar(:, :16):          self.xmlManager.xmlMetaReading(xml, 'lar', '(0:210, 0:16)')
+  lar(:, :):            self.xmlManager.xmlMetaReading(xml, 'lar', '(0:210, 0:215)')
+
+test_sequence_reading_two_slices_with_category:
+  # With two slices
+  cat.lar(5, 6):        self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:6, 6:7)')
+  cat.lar(5, 6:16):     self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:6, 6:16)')
+  cat.lar(5, 6:):       self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:6, 6:215)')
+  cat.lar(5, :16):      self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:6, 0:16)')
+  cat.lar(5, :):        self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:6, 0:215)')
+
+  cat.lar(5:16, 6):     self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:16, 6:7)')
+  cat.lar(5:16, 6:16):  self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:16, 6:16)')
+  cat.lar(5:16, 6:):    self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:16, 6:215)')
+  cat.lar(5:16, :16):   self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:16, 0:16)')
+  cat.lar(5:16, :):     self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:16, 0:215)')
+
+  cat.lar(5:, 6):       self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:210, 6:7)')
+  cat.lar(5:, 6:16):    self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:210, 6:16)')
+  cat.lar(5:, 6:):      self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:210, 6:215)')
+  cat.lar(5:, :16):     self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:210, 0:16)')
+  cat.lar(5:, :):       self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(5:210, 0:215)')
+
+  cat.lar(:6, 6):       self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(0:6, 6:7)')
+  cat.lar(:6, 6:16):    self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(0:6, 6:16)')
+  cat.lar(:6, 6:):      self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(0:6, 6:215)')
+  cat.lar(:6, :16):     self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(0:6, 0:16)')
+  cat.lar(:6, :):       self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(0:6, 0:215)')
+
+  cat.lar(:, 6):        self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(0:210, 6:7)')
+  cat.lar(:, 6:16):     self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(0:210, 6:16)')
+  cat.lar(:, 6:):       self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(0:210, 6:215)')
+  cat.lar(:, :16):      self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(0:210, 0:16)')
+  cat.lar(:, :):        self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(0:210, 0:215)')
+
+
