@@ -35,13 +35,15 @@ class YasikEvaluator(YasikListener):
     def exitAssignment(self, ctx:YasikParser.AssignmentContext):
         if ctx.getChildCount() == 3:
             left_in = ctx.children[0].getText()
-            right = ctx.children[2].getText()+")"
+            right = ctx.children[2].getText()
+            if "self.xmlManager.xmlMetaReading" in left_in:
+                right+=")"
             symbol = ctx.children[1].getText()[0]
             if "self.xmlManager.xmlMetaReading" not in left_in:
                 left = left_in
                 prefix = "="
                 if symbol != "=":
-                    prefix = "="+left+"+"
+                    prefix = "="+left+symbol[-1]
                 content = left+prefix+right
             else:
                 left = left_in.replace("self.xmlManager.xmlMetaReading", "self.xmlManager.xmlMetaWriting")[:-1]

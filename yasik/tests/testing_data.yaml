@@ -1,6 +1,4 @@
 test_sequence_reading_one_slice:
-  var:                  var
-  var1:                 var1
   # Without slices
   lar:                  self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
   # With one slice
@@ -19,7 +17,7 @@ test_sequence_reading_one_slice:
   cat.lar(:):           self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(0:210, 0:1)')
 
 test_sequence_reading_two_slices_without_category:
-   # With two slices
+  # With two slices
   lar(5, 6):            self.xmlManager.xmlMetaReading(xml, 'lar', '(5:6, 6:7)')
   lar(5, 6:16):         self.xmlManager.xmlMetaReading(xml, 'lar', '(5:6, 6:16)')
   lar(5, 6:):           self.xmlManager.xmlMetaReading(xml, 'lar', '(5:6, 6:215)')
@@ -80,5 +78,137 @@ test_sequence_reading_two_slices_with_category:
   cat.lar(:, 6:):       self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(0:210, 6:215)')
   cat.lar(:, :16):      self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(0:210, 0:16)')
   cat.lar(:, :):        self.xmlManager.xmlMetaReading(xml, 'cat.lar', '(0:210, 0:215)')
+
+test_sequence_reading_arithmetica:
+# All objects
+  var:                  var
+  var1:                 var1
+  -var1:                -var1
+  -lar:                 -self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+  var+1:                var+1  
+  var+3.14159265359:    var+3.14159265359 
+  var+1.1:              var+1.1  
+  var+var1:             var+var1
+  (var+var1)+var2:      (var+var1)+var2
+
+# All operations
+  var+1:                var+1  
+  var-1:                var-1  
+  var*1:                var*1  
+  var/1:                var/1  
+
+# Diff objects
+  var+var1:             var+var1 
+  var-var1:             var-var1 
+  var*var1:             var*var1 
+  var/var1:             var/var1 
+
+  var+1:                var+1  
+  var-1:                var-1  
+  var*1:                var*1  
+  var/1:                var/1  
+
+  var+1.1:              var+1.1  
+  var-1.1:              var-1.1  
+  var*1.1:              var*1.1  
+  var/1.1:              var/1.1   
+
+  var+lar:              var+self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+  var-lar:              var-self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+  var*lar:              var*self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+  var/lar:              var/self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+
+  1.1+var1:             1.1+var1 
+  1.1-var1:             1.1-var1 
+  1.1*var1:             1.1*var1 
+  1.1/var1:             1.1/var1 
+
+  1.1+1:                1.1+1  
+  1.1-1:                1.1-1  
+  1.1*1:                1.1*1  
+  1.1/1:                1.1/1  
+
+  1.1+1.1:              1.1+1.1  
+  1.1-1.1:              1.1-1.1  
+  1.1*1.1:              1.1*1.1  
+  1.1/1.1:              1.1/1.1   
+
+  1.1+lar:              1.1+self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+  1.1-lar:              1.1-self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+  1.1*lar:              1.1*self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+  1.1/lar:              1.1/self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+
+  lar+var1:             self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')+var1 
+  lar-var1:             self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')-var1 
+  lar*var1:             self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')*var1 
+  lar/var1:             self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')/var1 
+
+  lar+1:                self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')+1  
+  lar-1:                self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')-1  
+  lar*1:                self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')*1  
+  lar/1:                self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')/1  
+
+  lar+1.1:              self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')+1.1  
+  lar-1.1:              self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')-1.1  
+  lar*1.1:              self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')*1.1  
+  lar/1.1:              self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')/1.1   
+
+  lar+lar:              self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')+self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+  lar-lar:              self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')-self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+  lar*lar:              self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')*self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+  lar/lar:              self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')/self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+
+test_sequence_writing:
+  var = var:            var=var
+  var = lar:            var=self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+  var = 1:              var=1
+  var = 1.1:            var=1.1
+
+  lar = var:            self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', var)
+  lar = lar:            self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)'))
+  lar = 1:              self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', 1)
+  lar = 1.1:            self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', 1.1)
+
+  var += var:            var=var+var
+  var += lar:            var=var+self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+  var += 1:              var=var+1
+  var += 1.1:            var=var+1.1
+
+  lar += var:            self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')+var)
+  lar += lar:            self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')+self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)'))
+  lar += 1:              self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')+1)
+  lar += 1.1:            self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')+1.1)
+
+  var -= var:            var=var-var
+  var -= lar:            var=var-self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+  var -= 1:              var=var-1
+  var -= 1.1:            var=var-1.1
+
+  lar -= var:            self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')-var)
+  lar -= lar:            self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')-self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)'))
+  lar -= 1:              self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')-1)
+  lar -= 1.1:            self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')-1.1)
+
+  var *= var:            var=var*var
+  var *= lar:            var=var*self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+  var *= 1:              var=var*1
+  var *= 1.1:            var=var*1.1
+
+  lar *= var:            self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')*var)
+  lar *= lar:            self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')*self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)'))
+  lar *= 1:              self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')*1)
+  lar *= 1.1:            self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')*1.1)
+
+  var /= var:            var=var/var
+  var /= lar:            var=var/self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')
+  var /= 1:              var=var/1
+  var /= 1.1:            var=var/1.1
+
+  lar /= var:            self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')/var)
+  lar /= lar:            self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')/self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)'))
+  lar /= 1:              self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')/1)
+  lar /= 1.1:            self.xmlManager.xmlMetaWriting(xml, 'lar', '(0:1, 0:1)', self.xmlManager.xmlMetaReading(xml, 'lar', '(0:1, 0:1)')/1.1)
+
+  
 
 

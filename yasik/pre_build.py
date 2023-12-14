@@ -2,15 +2,18 @@
 import subprocess
 import os
 import yaml
-
-
 from copy import copy
 command = "./gradlew" if os.name == "posix" else "gradlew.bat"
 subprocess.run([command, "generateGrammarSource"])
 
-# Tests generation
-
+## Tests generation
 print("Testing code generation initialization")
+# Make generation folder
+try:  
+    os.mkdir("./tests/test_generated/")  
+except OSError as error:  
+    print(error) 
+
 counter = 0
 def test_file_generation(name: str, dict: dict):
     if name:
@@ -26,8 +29,7 @@ def test_file_generation(name: str, dict: dict):
                 tests += current_test
             file.write(preambula+tests)
             counter += test_number+1
-        print("Testing code file "+name+" was sucessfully generated")
-
+        print("Testing code file "+name+".py was sucessfully generated")
 
 with open("./tests/testing_data.yaml", "r") as stream:
     try:
@@ -37,4 +39,4 @@ with open("./tests/testing_data.yaml", "r") as stream:
     except yaml.YAMLError as exc:
         print(exc)
 
-print("Testing code was sucessfully generated")   
+print("Testing code was sucessfully generated")
