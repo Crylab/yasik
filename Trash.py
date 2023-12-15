@@ -1403,4 +1403,16 @@ class XMLFacade:
         self.readroot = copy(self.tree.getroot())
         self.tree.write(self.path)
 
+def mat2str(matrix):
+    result = "["
+    width = matrix.shape[1]
+    for each in range(matrix.size):
+        result += str(matrix.item(each))
+        remaind = (each+1)%width
+        if each+1==matrix.size:
+            result += "]"
+            return result
+        if remaind == 0:
+            result += ";"
+        result += " "
 
