@@ -1067,3 +1067,340 @@ if __name__ == "__main__":
     main()
 
 
+from csv import reader, DictReader
+import re
+from xml.dom.minidom import Element 
+import xml.etree.ElementTree as ET
+import yaml
+import json
+import numpy as np
+from yaml.loader import SafeLoader
+from subprocess import DEVNULL, STDOUT, check_call
+import numpy as np
+from copy import copy
+import os
+import random
+
+# Function to parse a file quickly and perform data transformations
+def fast_parse(file_path, fast_parse_exe, alias, mat):
+    # Executes an external program to generate a JSON file from the input file
+    check_call(fast_parse_exe + " " + file_path, stdout=DEVNULL, stderr=STDOUT)
+    
+    # Path to the generated JSON file
+    jreference3 = file_path[:-3] + "json"
+    
+    # Opening the generated JSON file and loading its content into a Python dictionary
+    with open(jreference3) as f:
+        data = json.load(f)
+    
+    # Translating keys in the dictionary based on provided alias and mat parameters
+    data_ref_trans_laptimer = dictTransJSON(data, alias, mat)
+    
+    return data_ref_trans_laptimer
+
+
+# Function to perform dictionary key translations and data transformations
+def dictTransJSON(Dict, alias, mat):
+    result = {}
+    translation = {}
+
+    # Iterating through keys in the input dictionary
+    for each in Dict:
+        new_key = each
+        
+        # Removing certain patterns from the keys
+        new_key = re.sub("[\(\[].*?[\)\]]", "", new_key)
+        
+        # Translating keys based on the provided alias mapping
+        if new_key in alias:
+            new_key = alias[new_key]
+        
+        translation[each] = new_key
+    
+    # Converting values to NumPy arrays for specific keys in the dictionary
+    for each in translation:
+        result[translation[each]] = np.array(Dict[each])
+    
+    # Applying custom logic ('mat') to generate and update new key-value pairs in the dictionary
+    if mat is not None:
+        for mat_key in mat:
+            cond = mat[mat_key]
+            origins = []
+            
+            # Finding keys that match certain conditions specified in 'mat'
+            for each in result:
+                if cond.find(each) > -1:
+                    origins.append(each)
+            
+            # Modifying the conditions based on found keys
+            for each in origins:
+                temp = cond.replace(each, "result['" + each + "']")
+                cond = temp
+            
+            # Evaluating the modified condition and updating the dictionary
+            arr = eval(cond)
+            result[mat_key] = arr
+    
+    return result
+
+
+# Function to parse a specific type of CSV file
+def PiTecParsing(path):
+    with open(path, 'r') as read_obj:
+        # Skipping the first 18 rows
+        for _ in range(18):
+            _ = next(read_obj)
+        
+        # Reading the file using csv.DictReader
+        csv_dict_reader = DictReader(read_obj, delimiter='\t')
+        return list(csv_dict_reader)
+
+
+def dictTrans(Dict, alias, mat):
+    result = {}         # Dictionary to store the transformed data
+    translation = {}    # Dictionary to hold the translation of keys
+    
+    # Iterate through each dictionary in the input list 'Dict'
+    for each in Dict:
+        if not result:  # If the 'result' dictionary is empty
+            # Handle keys and values for the initial dictionary
+            for key in each:
+                new_key = key
+                new_key = re.sub("[\(\[].*?[\)\]]", "", new_key)  # Remove certain patterns from keys
+                if new_key in alias:
+                    new_key = alias[new_key]  # Translate keys based on the provided alias mapping
+                translation[key] = new_key  # Store translation for future reference
+                
+                new_list = []
+                # Convert values to float and handle None values
+                if each[key] is None:
+                    new_list.append(0.0)
+                else:
+                    new_list.append(float(each[key]))
+                
+                result[new_key] = new_list  # Store the transformed key-value pair
+                
+                # Apply custom logic ('mat') to generate and update new key-value pairs in the dictionary
+                if mat is not None:
+                    for mat_key in mat:
+                        new_list = []
+                        cond = mat[mat_key]
+                        for key in result:
+                            if key:
+                                temp = cond.replace(key, str(result[key][-1]))  # Replace keys in the condition
+                                cond = temp
+                        value = eval(cond)  # Evaluate the condition and get the value
+                        new_list.append(value)
+                        result[mat_key] = new_list  # Store the new value in the result dictionary
+        else:
+            tick = {}
+            # Handle keys and values after the first iteration
+            for key in each:
+                if each[key] is not None:
+                    if translation[key] not in tick:
+                        result[translation[key]].append(float(each[key]))  # Append values for existing keys
+                        tick[translation[key]] = True
+            
+            # Apply custom logic ('mat') to generate and update new key-value pairs in the dictionary
+            if mat is not None:
+                for mat_key in mat:
+                    cond = mat[mat_key]
+                    for key in result:
+                        if key:
+                            temp = cond.replace(key, str(result[key][-1]))  # Replace keys in the condition
+                            cond = temp
+                    value = eval(cond)  # Evaluate the condition and get the value
+                    result[mat_key].append(value)  # Append the new value to the result dictionary
+    
+    return result  # Return the transformed dictionary
+
+
+def subtractSquareCost(listOne, listTwo):
+    cost = 0.0  # Initialize the cost to 0
+    
+    # Sort both input lists in ascending order based on the first element of each tuple
+    listOne.sort()
+    listTwo.sort()
+    
+    indexOne = 0  # Initialize index for listOne
+    indexTwo = 0  # Initialize index for listTwo
+    
+    # Iterate through each element of listOne using enumeration (provides index and value)
+    for indexOne, valueOne in enumerate(listOne):
+        # While the end of the dataset wasnt reached
+        while indexTwo < len(listTwo):
+            valueTwo = listTwo[indexTwo]  # Get the value from listTwo at the current index
+            
+            # Check if the value in listOne is less or equal than the value in listTwo
+            if valueOne[0] <= valueTwo[0]:
+                if indexTwo > 0:
+                    # Calculate the difference between the second elements of the tuples and square it
+                    sub = valueOne[1] - valueTwo[1]
+                    cost += sub ** 2  # Add the squared difference to the cost
+                break  # Break out of the while loop
+            else:
+                indexTwo += 1  # Move to the next element in listTwo
+        
+    return cost  # Return the total cost calculated
+
+def subtractSquareCostInterp(listOne, listTwo):
+    cost = 0.0  # Initialize the cost to 0
+    
+    # Sort both input lists in ascending order based on the first element of each tuple
+    listOne.sort()
+    listTwo.sort()
+    
+    indexOne = 0  # Initialize index for listOne
+    indexTwo = 0  # Initialize index for listTwo
+    # Iterate through each element of listOne using enumeration (provides index and value)
+    for indexOne, valueOne in enumerate(listOne):
+        # While the end of the dataset wasnt reached
+        while indexTwo<len(listTwo):
+            valueTwo = listTwo[indexTwo] # Get the value from listTwo at the current index
+            
+            # Check if the value in listOne is less or equal than the value in listTwo
+            if(valueOne[0]<=valueTwo[0]):
+                if indexTwo>0:
+                    x1 = listTwo[indexTwo-1][0]
+                    x2 = listTwo[indexTwo][0]  
+                    y1 = listTwo[indexTwo-1][1]  
+                    y2 = listTwo[indexTwo][1]  
+                    x = listOne[indexOne][0]
+                    # Compute the linearly intepolated value of the function
+                    y = (((y2-y1)*(x-x1))/(x2-x1))+y1
+                    sub = listOne[indexOne][1]-y
+                    cost += sub**2 # Add the squared difference to the cost
+                break
+            else:
+                indexTwo += 1  # Move to the next element in listTwo
+    return cost # Return the total cost calculated
+
+def subtractSquareCostRegres(listOne, listTwo):
+    cost = 0.0  # Initialize the cost to 0
+    # This function returns the linearly regressed dataset
+    def getlinear(list_of_tuples):
+        def inner(x1):
+            return m * x1 + b
+        x = np.array([ele[0] for ele in list_of_tuples])
+        y = np.array([ele[1] for ele in list_of_tuples])
+        m = (len(x) * np.sum(x*y) - np.sum(x) * np.sum(y)) / (len(x)*np.sum(x*x) - np.sum(x) * np.sum(x))
+        b = (np.sum(y) - m *np.sum(x)) / len(x)
+        return inner
+    regressOne = getlinear(listOne) 
+    regressTwo = getlinear(listTwo)
+
+    # Looking for a boundaries in listOne, since we are going to iterate through it
+    N_max = max(listOne,key=lambda item:item[0])[0]
+    N_min = min(listOne,key=lambda item:item[0])[0]
+
+    # Compute the equal step per iteration
+    step = (N_max-N_min)/len(listOne)
+
+    # Iterate through the dataset
+    for x in np.arange(N_min, N_max, step):
+        sub = regressOne(x)-regressTwo(x)
+        cost += sub**2 # Add the squared difference to the cost
+    return cost
+
+def subtractSquareCostLowPass(listOne, listTwo):
+    cost = 0.0  # Initialize the cost to 0
+    
+    # Sort both input lists in ascending order based on the first element of each tuple
+    listOne.sort()
+    listTwo.sort()
+    
+    indexOne = 0  # Initialize index for listOne
+    indexTwo = 0  # Initialize index for listTwo
+
+    # Low-pass
+    alpha = 0.75
+    previous = None
+    filteredOne = []
+    for each in listOne:
+        if previous is None:
+            previous = alpha*each[1]
+            filteredOne.append((each[0], previous))
+            continue
+        filtered_value = alpha*each[1]+(1-alpha)*previous
+        previous = filtered_value
+        filteredOne.append((each[0], previous))
+    previous = None
+    filteredTwo = []
+    for each in listTwo:
+        if previous is None:
+            previous = alpha*each[1]
+            filteredTwo.append((each[0], previous))
+            continue
+        filtered_value = alpha*each[1]+(1-alpha)*previous
+        previous = filtered_value
+        filteredTwo.append((each[0], previous))
+    # Low-pass end
+    #
+    #
+    for indexOne, valueOne in enumerate(filteredOne):
+        while indexTwo<len(filteredTwo):
+            valueTwo = filteredTwo[indexTwo]
+            if(valueOne[0]<=valueTwo[0]):
+                if indexTwo>0:
+                    sub = valueOne[1]-valueTwo[1]
+                    cost += sub**2
+                break
+            else:
+                indexTwo += 1
+    return cost
+
+def get_xml_param_list(path):
+    tree = ET.parse(path)
+    root = tree.getroot()
+    param_list = []
+    for each in root.findall('*'):
+        for subeach in each.findall('*'):
+            param_list.append(subeach.tag)
+    return param_list
+
+
+
+class XMLFacade:
+    def __init__(self, path: str):
+        self.path = path
+        self.readroot = ET.parse(path).getroot()
+        self.tree = ET.parse(path)
+        
+    def xmlMetaWriting(self, name, position, value):     
+        def round_to_square(in_position):
+            numbers = in_position[1:-1]
+            result = "["+numbers.replace(",", "][")+"]"
+            return result
+        
+        matrix_as_text = ""
+        for param in self.tree.getroot().iter(name):
+            matrix_as_text = param[1].text
+            break
+        if not matrix_as_text:
+            raise Exception("There is no such parameter in xml file!")
+        matrix_text = np.matrix(matrix_as_text)
+        command = "matrix_text.A"+round_to_square(position)+"=value"
+        exec(command)
+        updated_value = mat2str(matrix_text)
+        if matrix_text.size == 1:
+            updated_value = str(value)
+        for param in self.tree.getroot().iter(name):
+            param[1].text = updated_value
+            break
+
+    def xmlMetaReading(self, name, position):
+        matrix_as_text = ""
+        for param in self.readroot.iter(name):
+            matrix_as_text = param[1].text
+            break
+        if not matrix_as_text:
+            raise Exception("There is no such parameter in xml file!")
+        matrix_text = np.matrix(matrix_as_text)
+        value = eval("matrix_text.item"+position)
+        return value
+
+    def write_to_file(self):
+        self.readroot = copy(self.tree.getroot())
+        self.tree.write(self.path)
+
+
