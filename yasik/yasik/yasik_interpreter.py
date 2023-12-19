@@ -4,13 +4,13 @@ from yasik.parser_generated.YasikParser import YasikParser
 from yasik.parser_generated.YasikListener import YasikListener
 from copy import copy
 
-def yasik_compiler(input_str: str) -> str:
+def yasik_compiler(input_str: str,  param: list) -> str:
     input_stream = InputStream(input_str)
     lexer = YasikLexer(input=input_stream)
     token_stream = CommonTokenStream(lexer)
     parser = YasikParser(token_stream)
     evaluator = YasikEvaluator()
-    evaluator.param_list = {"lar": (210, 215)}    # Substitute it by function call
+    evaluator.param_list = param
     parser.addParseListener(evaluator)
     tree = parser.code()
     return tree.getText()
@@ -28,7 +28,6 @@ class YasikEvaluator(YasikListener):
 
     # Exit a parse tree produced by YasikParser#assignment.
     def enterAssignment(self, ctx:YasikParser.AssignmentContext):
-        print("ciao")
         pass
 
     # Exit a parse tree produced by YasikParser#assignment.
@@ -68,14 +67,7 @@ class YasikEvaluator(YasikListener):
     # Exit a parse tree produced by YasikParser#factor.
     def exitFactor(self, ctx:YasikParser.FactorContext):
         pass
-    '''
-    class MySlice:
-        def __init__(self, subtree: YasikParser.Yasik_sliceContext):
-            self.begin = subtree.
-            self.end = end
 
-            def __to
-    '''
     # Exit a parse tree produced by YasikParser#yasik_slice.
     def exitYasik_slice(self, ctx:YasikParser.Yasik_sliceContext):
 
@@ -107,7 +99,7 @@ class YasikEvaluator(YasikListener):
 
         def sub(name, first_slice, second_slice, prefix=""):
 
-            content = "self.xmlManager.xmlMetaReading(xml, '"+prefix+name+"', '("+first_slice+", "+second_slice+")')"
+            content = "self.xmlManager.xmlMetaReading('"+prefix+name+"', '("+first_slice+", "+second_slice+")')"
             if "MAXLIMITKEYWORD)" in content:
                 content = content.replace("MAXLIMITKEYWORD)", str(self.param_list[name][1])+")")
             if "MAXLIMITKEYWORD," in content:
@@ -125,11 +117,11 @@ class YasikEvaluator(YasikListener):
             sub(ctx.children[2].getText(), zero_string, zero_string, prefix=ctx.children[0].getText()+".")
 
         if ctx.getChildCount() == 4: # param(Slice)
-            sub(ctx.children[0].getText(), ctx.children[2].getText(), zero_string)
+            sub(ctx.children[0].getText(), zero_string, ctx.children[2].getText())
          
         if ctx.getChildCount() == 6: 
             if ctx.children[1].getText() == ".": # category.param(Slice)
-                sub(ctx.children[2].getText(), ctx.children[4].getText(), zero_string, prefix=ctx.children[0].getText()+".")
+                sub(ctx.children[2].getText(), zero_string, ctx.children[4].getText(), prefix=ctx.children[0].getText()+".")
 
             else: # param(Slice, Slice)
                 sub(ctx.children[0].getText(), ctx.children[2].getText(), ctx.children[4].getText())                

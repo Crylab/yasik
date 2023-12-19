@@ -1,0 +1,86 @@
+<parameters>
+    <group1>
+        <param1>
+            <type>scalar</type>
+            <value>1.0</value>
+        </param1>
+        <param2>
+            <type>scalar</type>
+            <value>0.7726454042</value>
+        </param2>
+        <param3>
+            <type>scalar</type>
+            <value>0.8259629734</value>
+        </param3>
+        <param4>
+            <type>scalar</type>
+            <value>-0.1386920867</value>
+        </param4>
+        <param5>
+            <type>scalar</type>
+            <value>10890.0488288545</value>
+        </param5>
+        <param6>
+            <type>scalar</type>
+            <value>61976779.42</value>
+        </param6>
+        <param7>
+            <type>scalar</type>
+            <value>0.8204672315</value>
+        </param7>
+        <param8>
+            <type>scalar</type>
+            <value>-0.3197685889</value>
+        </param8>
+        <param9>
+            <type>scalar</type>
+            <value>-0.5488387420</value>
+        </param9>
+        <param10>
+            <type>scalar</type>
+            <value>0.4751952381</value>
+        </param10>
+    </group1>
+    <group2>
+        <param11>
+            <type>vector</type>
+            <value>[1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0 9.0]</value>
+        </param11>
+        <param12>
+            <type>vector</type>
+            <value>[6.5883791701 9.013739327 8.5934321618 8.0293455552 7.1820536811 7.3119272139 8.9663357544 4.2615573165 3.9686611397 1.4773951091]</value>
+        </param12>
+        <param13>
+            <type>vector</type>
+            <value>[488296490.77 322606268.85 732369468.66 877341444.59 1951577424.09 764029919.64 1456911372.32 1479134808.31 159242189.93 197471410.91]</value>
+        </param13>
+        <param14>
+            <type>vector</type>
+            <value>[9.4282054498 3.9688656456 5.444241889 8.3967324181 2.0860836329 3.5221577066 9.0184288048 6.1499294174 4.4562928744 9.85330514]</value>
+        </param14>
+        <param15>
+            <type>vector</type>
+            <value>[-9.4282054498 3.9688656456 -5.444241889 8.3967324181 -2.0860836329 3.5221577066 -9.0184288048 6.1499294174 -4.4562928744 9.85330514]</value>
+        </param15>
+        <param16>
+            <type>vector</type>
+            <value>[-4.4932170983 -3.9054878084 6.0503632119 6.6944674517 -1.7488655153 -8.4461074604 2.0181072196 2.5523135693 -2.2197933701 -1.5152033137]</value>
+        </param16>
+        <param17>
+            <type>vector</type>
+            <value>[2.6431566317 3.8027758495]</value>
+        </param17>
+        <param18>
+            <type>vector</type>
+            <value>[7.2231765176]</value>
+        </param18>
+        <param19>
+            <type>vector</type>
+            <value>[7.5165183141 8.9950987161 9.8291701832 5.5389816186]</value>
+        </param19>
+        <param20>
+            <type>vector</type>
+            <value>[9.8297663586 -8.4307100174 1.245365874]</value>
+        </param20>
+    </group2>
+</parameters>
