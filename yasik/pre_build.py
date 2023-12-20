@@ -55,4 +55,12 @@ with open("./tests/testing_sample_data.yaml", "r") as stream:
     except yaml.YAMLError as exc:
         print(exc)
 
+with open("./tests/testing_sample_data_writing.yaml", "r") as stream:
+    try:
+        categories = yaml.safe_load(stream)
+        for each in categories:
+            test_sequential_file_generation(each, categories[each], preambula_int, test_code_int)
+    except yaml.YAMLError as exc:
+        print(exc)
+
 print("Testing code was sucessfully generated")
