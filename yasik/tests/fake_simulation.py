@@ -22,28 +22,60 @@ def mat2str(matrix):
 class XMLFacade:
     def __init__(self, path: str):
         self.path = path
+        self.backup = ET.parse(path)
         self.readroot = ET.parse(path).getroot()
         self.tree = ET.parse(path)
         
     def xmlMetaWriting(self, name, position, value):  
         matrix_as_text = ""
-        for param in self.tree.getroot().iter(name):
-            matrix_as_text = param[1].text
-            break
+        if "." in name:
+            [category, param_name] = name.split(".")
+            for each in self.readroot.findall(category):
+                for subeach in each.findall(param_name):
+                    matrix_as_text = subeach[1].text
+                    break
+        else:
+            for param in self.readroot.iter(name):
+                matrix_as_text = param[1].text
+                break
         if not matrix_as_text:
             raise Exception("There is no such parameter in xml file!")
         matrix_text = np.matrix(matrix_as_text)
-        command = "matrix_text["+position[1:-1]+"]=value"        
+
+        # All matricex must be converyted to double otherwise assignmnent cause a set of zeros
+        class_obj = np.matrix("[1 2 3]")
+        value_fload = copy(value)
+        if type(value) == type(class_obj):
+            if matrix_text.dtype != value.dtype:
+                value_fload = value_fload.astype('float64')
+                matrix_text = matrix_text.astype('float64')
+                
+
+        command = "matrix_text["+position[1:-1]+"]=value_fload"        
         exec(command)
-        updated_value = mat2str(matrix_text)        
-        for param in self.tree.getroot().iter(name):
-            param[1].text = updated_value
+        updated_value = mat2str(matrix_text)
+        if "." in name:
+            for each in self.tree.getroot().findall(category):
+                for subeach in each.findall(param_name):
+                    subeach[1].text = updated_value
+                    break
+        else:
+            for param in self.tree.getroot().iter(name):
+                param[1].text = updated_value
+                break
 
     def xmlMetaReading(self, name, position):
         matrix_as_text = ""
-        for param in self.readroot.iter(name):
-            matrix_as_text = param[1].text
-            break
+        if "." in name:
+            [category, param_name] = name.split(".")
+            for each in self.readroot.findall(category):
+                for subeach in each.findall(param_name):
+                    matrix_as_text = subeach[1].text
+                    break
+        else:
+            for param in self.readroot.iter(name):
+                matrix_as_text = param[1].text
+                break
         if not matrix_as_text:
             raise Exception("There is no such parameter in xml file!")
         matrix_text = np.matrix(matrix_as_text)
@@ -61,6 +93,10 @@ class XMLFacade:
                 value += eval("matrix_text.item"+current_position)
         '''
         return value
+    
+    def restore_backup(self):
+        self.backup.write(self.path)
+        self.__init__(self.path)
 
     def write_to_file(self):
         self.readroot = copy(self.tree.getroot())
