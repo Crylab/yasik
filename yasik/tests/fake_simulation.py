@@ -19,13 +19,26 @@ def mat2str(matrix):
             result += ";"
         result += " "
 
+def string_to_matrix(string: str):
+    if False:
+        return np.matrix(string)
+    local_string = copy(string)
+    if "[" not in local_string:
+        local_string = "["+local_string+"]"
+    local_string=local_string.replace("[", "[[")
+    local_string=local_string.replace("]", "]]")        
+    local_string=local_string.replace("; ", "],[")
+    local_string=local_string.replace(" ", ",")
+    matrix_one = eval("np.array("+local_string+")")
+    return matrix_one
+
 class XMLFacade:
     def __init__(self, path: str):
         self.path = path
         self.backup = ET.parse(path)
         self.readroot = ET.parse(path).getroot()
         self.tree = ET.parse(path)
-        
+
     def xmlMetaWriting(self, name, position, value):  
         matrix_as_text = ""
         if "." in name:
@@ -40,10 +53,14 @@ class XMLFacade:
                 break
         if not matrix_as_text:
             raise Exception("There is no such parameter in xml file!")
-        matrix_text = np.matrix(matrix_as_text)
+        
+        # Method np.matrix was depricated
+        #matrix_text = np.matrix(matrix_as_text)
+
+        matrix_text = string_to_matrix(matrix_as_text)
 
         # All matricex must be converyted to double otherwise assignmnent cause a set of zeros
-        class_obj = np.matrix("[1 2 3]")
+        class_obj = np.array([1,2,3])
         value_fload = copy(value)
         if type(value) == type(class_obj):
             if matrix_text.dtype != value.dtype:
@@ -78,7 +95,11 @@ class XMLFacade:
                 break
         if not matrix_as_text:
             raise Exception("There is no such parameter in xml file!")
-        matrix_text = np.matrix(matrix_as_text)
+        
+        # Method np.matrix was depricated
+        #matrix_text = np.matrix(matrix_as_text)
+
+        matrix_text = string_to_matrix(matrix_as_text)
 
         value = eval("matrix_text"+"["+position[1:-1]+"]")
 
@@ -118,7 +139,7 @@ def get_xml_param_dict(path):
     for each in root.findall('*'):
         for subeach in each.findall('*'):
             for value in subeach.findall('value'):
-                m = np.matrix(value.text)
+                m = string_to_matrix(value.text)
                 shape = m.shape
                 param_dict[subeach.tag] = shape
     return param_dict

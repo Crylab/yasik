@@ -816,4 +816,3 @@ test_integration_reading_matrix_real_two_slice:
 
   param22(4:, 4:):  0.9910416527
   param22(4:, 4:5): 0.9910416527
-
