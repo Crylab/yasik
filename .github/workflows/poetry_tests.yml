@@ -20,7 +20,9 @@ jobs:
         # see details (matrix, python-version, python-version-file, etc.)
         # https://github.com/actions/setup-python
       - name: Change folder
-        run: cd ./yasik/
+        run: |
+          cd ./yasik/
+          ls
       - name: Install poetry
         uses: abatilo/actions-poetry@v2
       - name: Setup a local virtual environment (if no poetry.toml file)
