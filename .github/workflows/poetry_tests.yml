@@ -35,13 +35,8 @@ jobs:
         run: |
           cd ./yasik/
           poetry install
-      - name: Build the project
+      - name: Build and run the project
         run: |
           cd ./yasik/
           poetry build
-      - name: Run the automated tests (for example)
-        run: |
-          cd ./yasik/tests/
-          ls
-          cd ..
           poetry run pytest
