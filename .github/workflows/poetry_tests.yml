@@ -42,5 +42,5 @@ jobs:
       - name: Run the automated tests (for example)
         run: |
           cd ./yasik/
-          ls
+          ls /tests
           poetry run pytest
