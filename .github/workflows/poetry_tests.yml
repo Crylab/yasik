@@ -41,6 +41,7 @@ jobs:
           poetry build
       - name: Run the automated tests (for example)
         run: |
-          cd ./yasik/
-          ls /tests
+          cd ./yasik/tests/
+          ls
+          cd ..
           poetry run pytest
