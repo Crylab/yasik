@@ -31,12 +31,10 @@ jobs:
         with:
           path: ./.venv
           key: venv-${{ hashFiles('poetry.lock') }}
-      - name: Install the project dependencies
-        run: |
-          cd ./yasik/
-          poetry install
+      
       - name: Build and run the project
         run: |
           cd ./yasik/
+          poetry install
           poetry build
           poetry run pytest
