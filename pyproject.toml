@@ -9,10 +9,11 @@ packages = [{include = "yasik"}]
 [tool.poetry.dependencies]
 python = "^3.9.13"
 antlr4-python3-runtime = "4.13.1"
-treelib = "^1.7.0"
+flake8 = "7.0.0"
+numpy = "^1.26.2"
 pytest = "^7.4.3"
 pyyaml = "^6.0.1"
-numpy = "^1.26.2"
+treelib = "^1.7.0"
 
 [tool.poetry.build]
 generate-setup-file = false

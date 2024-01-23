@@ -28,8 +28,16 @@ jobs:
         with:
           distribution: 'temurin'
           java-version-file: .java-version
-      - name: Build and run the project
-        run: |
-          poetry install
-          poetry build
-          poetry run pytest
+      - name: Install dependencies
+        run: poetry install
+      - name: Install all dependencies
+        run: poetry install
+      - name: Static Analysis
+        run: poetry run flake8
+      - name: Build
+        run: poetry build
+      - name: Test
+        run: poetry run pytest
+      - name: Deploy
+        if: contains(os.runner, 'Linux')
+        run: echo '@Crylab, TODO'

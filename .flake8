@@ -1,0 +1,9 @@
+[flake8]
+exclude =
+    .git,
+    __pycache__,
+    docs/source/conf.py,
+    build,
+    dist,
+    yasik/parser_generated,
+    tests/test_generated,
