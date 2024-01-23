@@ -24,6 +24,8 @@ jobs:
         with:
           cache: 'poetry'
       - uses: actions/setup-java@v4.0.0
+        with:
+          distribution: 'temurin'
       - name: Build and run the project
         run: |
           poetry install
