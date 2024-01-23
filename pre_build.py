@@ -2,6 +2,7 @@
 import subprocess
 import os
 import yaml
+import shutil
 from copy import copy
 command = "./gradlew" if os.name == "posix" else "gradlew.bat"
 subprocess.run([command, "generateGrammarSource"])
@@ -13,9 +14,9 @@ try:
     os.mkdir("./tests/test_generated/")
 except OSError as error:  
     print(error) 
-    
-val = os.system("copy \".\\tests\\test_sample.xml\" \".\\tests\\test_generated\\test_sample.xml\"")
-val = os.system("copy \".\\tests\\fake_simulation.py\" \".\\tests\\test_generated\\fake_simulation.py\"")
+
+shutil.copy('.\\tests\\test_sample.xml\', '.\\tests\\test_generated\\test_sample.xml\')
+shutil.copy('.\\tests\\fake_simulation.py\', '.\\tests\\test_generated\\fake_simulation.py\')
 
 counter = 0
 
