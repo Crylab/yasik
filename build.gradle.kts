@@ -8,7 +8,7 @@ repositories {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(file("java-version.txt").readText().trim()))
+        languageVersion.set(JavaLanguageVersion.of(file(".java-version").readText().trim()))
     }
 }
 
