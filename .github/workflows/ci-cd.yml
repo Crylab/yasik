@@ -1,0 +1,31 @@
+name: CI/CD
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    strategy:
+      matrix:
+        os: [ubuntu-22.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5.0.0
+        with:
+          python-version: '3.9'
+          cache: 'poetry'
+      - uses: actions/setup-java@v4.0.0
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2
+      - name: Build and run the project
+        run: |
+          poetry install
+          poetry build
+          poetry run pytest

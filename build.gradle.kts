@@ -8,19 +8,23 @@ repositories {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
+        languageVersion.set(JavaLanguageVersion.of(file("java-version.txt").readText().trim()))
     }
 }
 
+
 dependencies {
+    val antlrPythonRuntimeVersionRegex = Regex("""antlr4-python3-runtime\s*=\s*\".?(\d+\.\d+(\.\d+)?)"$""")
     val antlrVersion = file("pyproject.toml").readLines()
-        .mapNotNull { Regex("""antlr4-python3-runtime\s*=\s*\".?(\d+\.\d+(\.\d+)?)"$""").matchEntire(it) }
-        .first()
-        .groupValues[1]
+            .firstNotNullOf {
+                antlrPythonRuntimeVersionRegex.matchEntire(it)
+            }
+            .groupValues[1]
     antlr("org.antlr:antlr4:$antlrVersion")
 }
 
 tasks.generateGrammarSource.configure {
+
     arguments = listOf(
         "-Dlanguage=Python3",
         "${projectDir}/src/main/antlr/Yasik.g4",
