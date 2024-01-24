@@ -39,5 +39,5 @@ jobs:
       - name: Test
         run: poetry run pytest
       - name: Deploy
-        if: contains(os.runner, 'Linux')
+        if: contains(runner.os, 'Linux')
         run: echo '@Crylab, TODO'
