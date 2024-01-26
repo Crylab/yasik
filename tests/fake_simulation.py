@@ -1,8 +1,7 @@
 import xml.etree.ElementTree as ET
 import numpy as np
-import os
-import yaml
 from copy import copy
+
 
 def mat2str(matrix):
     if matrix.size == 1:
@@ -11,13 +10,14 @@ def mat2str(matrix):
     width = matrix.shape[1]
     for each in range(matrix.size):
         result += str(matrix.item(each))
-        remaind = (each+1)%width
-        if each+1==matrix.size:
+        remaind = (each + 1) % width
+        if each + 1 == matrix.size:
             result += "]"
             return result
         if remaind == 0:
             result += ";"
         result += " "
+
 
 def string_to_matrix(string: str):
     if False:
@@ -25,12 +25,13 @@ def string_to_matrix(string: str):
     local_string = copy(string)
     if "[" not in local_string:
         local_string = "["+local_string+"]"
-    local_string=local_string.replace("[", "[[")
-    local_string=local_string.replace("]", "]]")        
-    local_string=local_string.replace("; ", "],[")
-    local_string=local_string.replace(" ", ",")
+    local_string = local_string.replace("[", "[[")
+    local_string = local_string.replace("]", "]]")
+    local_string = local_string.replace("; ", "],[")
+    local_string = local_string.replace(" ", ",")
     matrix_one = eval("np.array("+local_string+")")
     return matrix_one
+
 
 class XMLFacade:
     def __init__(self, path: str):
@@ -39,7 +40,7 @@ class XMLFacade:
         self.readroot = ET.parse(path).getroot()
         self.tree = ET.parse(path)
 
-    def xmlMetaWriting(self, name, position, value):  
+    def xmlMetaWriting(self, name, position, value):
         matrix_as_text = ""
         if "." in name:
             [category, param_name] = name.split(".")
@@ -53,22 +54,20 @@ class XMLFacade:
                 break
         if not matrix_as_text:
             raise Exception("There is no such parameter in xml file!")
-        
+
         # Method np.matrix was depricated
-        #matrix_text = np.matrix(matrix_as_text)
+        # matrix_text = np.matrix(matrix_as_text)
 
         matrix_text = string_to_matrix(matrix_as_text)
 
         # All matricex must be converyted to double otherwise assignmnent cause a set of zeros
-        class_obj = np.array([1,2,3])
         value_fload = copy(value)
-        if type(value) == type(class_obj):
+        if isinstance(value, np.ndarray):
             if matrix_text.dtype != value.dtype:
                 value_fload = value_fload.astype('float64')
                 matrix_text = matrix_text.astype('float64')
-                
 
-        command = "matrix_text["+position[1:-1]+"]=value_fload"        
+        command = "matrix_text["+position[1:-1]+"]=value_fload"
         exec(command)
         updated_value = mat2str(matrix_text)
         if "." in name:
@@ -95,12 +94,14 @@ class XMLFacade:
                 break
         if not matrix_as_text:
             raise Exception("There is no such parameter in xml file!")
-        
+
         # Method np.matrix was depricated
-        #matrix_text = np.matrix(matrix_as_text)
+        # matrix_text = np.matrix(matrix_as_text)
 
         matrix_text = string_to_matrix(matrix_as_text)
-
+        # The Flake8 cannot understood that
+        # matrix_text is used in command
+        value = matrix_text
         value = eval("matrix_text"+"["+position[1:-1]+"]")
 
         '''
@@ -114,7 +115,7 @@ class XMLFacade:
                 value += eval("matrix_text.item"+current_position)
         '''
         return value
-    
+
     def restore_backup(self):
         self.backup.write(self.path)
         self.__init__(self.path)
@@ -122,6 +123,7 @@ class XMLFacade:
     def write_to_file(self):
         self.readroot = copy(self.tree.getroot())
         self.tree.write(self.path)
+
 
 def get_xml_param_list(path):
     tree = ET.parse(path)
@@ -131,6 +133,7 @@ def get_xml_param_list(path):
         for subeach in each.findall('*'):
             param_list.append(subeach.tag)
     return param_list
+
 
 def get_xml_param_dict(path):
     tree = ET.parse(path)
@@ -144,8 +147,9 @@ def get_xml_param_dict(path):
                 param_dict[subeach.tag] = shape
     return param_dict
 
+
 class Test_Simulation:
-    def __init__(self, xml) -> None:          
+    def __init__(self, xml) -> None:
         self.xmlManager = XMLFacade(xml)
 
     def execute_meta_code(self, matlab_input: str):
@@ -155,6 +159,3 @@ class Test_Simulation:
         except:
             exec(matlab_input)
         return value
-
-
-    

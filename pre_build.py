@@ -67,7 +67,8 @@ test_code_wrt = """def test_TEST_NUMBER():\n\tinput_code = \"INPUT_CODE\"\n\texp
                 obj.xmlManager.restore_backup()\n\tif str(result_after) == str(result_before):\n\t\t
                 raise Exception(\"The input code:\t\t\"+input_code+\" doesnt cause any changes in XML file\")\n\t
                 if str(result_after) != expected_code:\n\t\traise Exception(\"The input code:\\t\\t\"+input_code+\"\\n
-                The gotten result:\\t\\t\\t\"+str(result_after)+\"\\nThe expected result:\\t\\t\\t\"+expected_code)\n\n\n"""
+                The gotten result:\\t\\t\\t\"+str(result_after)+\"\\n
+                The expected result:\\t\\t\\t\"+expected_code)\n\n\n"""
 
 with open("./tests/testing_data.yaml", "r") as stream:
     try:
