@@ -154,8 +154,8 @@ class Test_Simulation:
 
     def execute_meta_code(self, matlab_input: str):
         value = None
-        try:
-            value = mat2str(eval(matlab_input))
-        except:
+        if "=" in matlab_input:
             exec(matlab_input)
+        else:
+            value = mat2str(eval(matlab_input))
         return value

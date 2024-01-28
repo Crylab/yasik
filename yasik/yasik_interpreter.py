@@ -89,7 +89,7 @@ class YasikEvaluator(YasikListener):
             else:
                 sub(ctx.children[0].getText()+":MAXLIMITKEYWORD")
 
-        if ctx.getChildCount() == 3: # N:N
+        if ctx.getChildCount() == 3:
             sub(ctx.children[0].getText()+":"+ctx.children[2].getText())
 
     # Exit a parse tree produced by YasikParser#functionCall.
@@ -125,7 +125,7 @@ class YasikEvaluator(YasikListener):
                     ctx.children[4].getText(), prefix=ctx.children[0].getText() + ".")
 
             else:
-                sub(ctx.children[0].getText(), ctx.children[2].getText(), ctx.children[4].getText())                
+                sub(ctx.children[0].getText(), ctx.children[2].getText(), ctx.children[4].getText())
 
         if ctx.getChildCount() == 8:
             sub(ctx.children[2].getText(), ctx.children[4].getText(),
