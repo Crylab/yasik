@@ -156,6 +156,6 @@ class Test_Simulation:
         value = None
         try:
             value = mat2str(eval(matlab_input))
-        finally:
+        except AttributeError:
             exec(matlab_input)
         return value
