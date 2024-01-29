@@ -41,7 +41,7 @@ jobs:
       - name: Zip the project
         if: contains(runner.os, 'Linux')
         run: zip -r target.zip *
-      - name: Create release
+      - name: Create Release
         if: contains(runner.os, 'Linux')
         id: create_release
         uses: actions/create-release@v1
@@ -50,7 +50,7 @@ jobs:
         with:
           tag_name: ${{ github.ref_name }}
           release_name: Release ${{ github.ref_name }}
-      - name: Upload Release Assets
+      - name: Upload Assets
         if: contains(runner.os, 'Linux')
         id: upload_assets
         uses: actions/upload-release-asset@v1
