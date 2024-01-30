@@ -64,7 +64,7 @@ jobs:
       - name: Build
         run: poetry build
       - name: Zip the files
-        run: zip release.zip *
+        run: zip -r release.zip *
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
