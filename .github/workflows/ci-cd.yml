@@ -63,8 +63,6 @@ jobs:
         run: poetry run flake8
       - name: Build
         run: poetry build
-      - name: Install twine 
-        run: poetry add twine
       - name: Build package
         run: poetry run python3 setup.py sdist bdist_wheel
       - name: Show the structure
