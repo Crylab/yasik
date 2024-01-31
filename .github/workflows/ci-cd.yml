@@ -38,8 +38,42 @@ jobs:
         run: poetry build
       - name: Test
         run: poetry run pytest
+  publish:
+    name: Publish
+    runs-on: ubuntu-22.04
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2
+      - uses: actions/setup-python@v5.0.0
+        with:
+          cache: 'poetry'
+      - uses: actions/setup-java@v4.0.0
+        with:
+          distribution: 'temurin'
+          java-version-file: .java-version
+      - name: Install dependencies
+        run: poetry install
+      - name: Install all dependencies
+        run: poetry install
+      - name: Static Analysis
+        run: poetry run flake8
+      - name: Build
+        run: poetry build
+      - name: Install twine 
+        run: poetry add twine
+      - name: Build package
+        run: poetry run python3 setup.py sdist bdist_wheel
+      - name: Show the structure
+        run: ls
+      - name: Uploading
+        run: poetry run twine upload dist/* -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }}
+
   release:
-    name: Create Release
+    name: Release
     runs-on: ubuntu-22.04
     permissions: write-all
     steps:
@@ -64,7 +98,10 @@ jobs:
       - name: Build
         run: poetry build
       - name: Zip the files
-        run: zip -r release.zip *
+        run: zip -r release.zip yasik
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -72,15 +109,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           run: |
-           echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
-           echo "Tag name from github.ref_name: ${{  github.ref_name }}"
-          tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
+           echo "Tag name from github.ref_name: ${{ steps.date.outputs.date }}"
+          tag_name: ${{ steps.date.outputs.date }}
+          release_name: Release ${{ steps.date.outputs.date }}
           body: |
-            Changes in this release:
-            - Added feature A
-            - Fixed issue B
-            - Improved performance
+            Fresh release.
+            Copy-and-paste it in your project
+            from yasik import compiler
+            Call compiler() function
             
       - name: Upload Release Assets
         id: upload_assets
