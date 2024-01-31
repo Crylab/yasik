@@ -64,7 +64,7 @@ jobs:
       - name: Build
         run: poetry build
       - name: Build package
-        run: poetry run python3 setup.py sdist bdist_wheel
+        run: poetry run python3 setup.py bdist_wheel
       - name: Show the structure
         run: ls
       - name: Uploading
