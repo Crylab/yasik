@@ -1,5 +1,5 @@
 import xml.etree.ElementTree as ET
-from yasik_interpreter import yasik_compiler
+from yasik.yasik_interpreter import yasik_compiler
 
 
 def get_xml_param_list(path):
