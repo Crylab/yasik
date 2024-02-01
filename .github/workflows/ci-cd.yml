@@ -70,7 +70,7 @@ jobs:
       - name: Show the structure
         run: ls
       - name: Uploading
-        run: poetry run twine upload dist/* -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }}
+        run: poetry run twine upload dist/* -u __token__ -p ${{ secrets.PYPI_TOKEN }}
 
   release:
     name: Release
