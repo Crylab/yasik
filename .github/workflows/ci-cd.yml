@@ -106,14 +106,14 @@ jobs:
         id: version
         run: | 
           VERSION=$(python3 setup.py --version)
-          echo $VERSION
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.version.outputs.version }}
+          tag_name: tag-${{ steps.version.outputs.version }}
           release_name: Release v. ${{ steps.version.outputs.version }} by ${{ steps.date.outputs.date }}
           body: |
             Fresh release.
