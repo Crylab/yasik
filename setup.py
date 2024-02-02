@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages
+import importlib.metadata
 
-VERSION = '0.0.4'
+VERSION = importlib.metadata.version('yasik')
 DESCRIPTION = 'Yasik language compiler'
 
 # Setting up

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "yasik"
-version = "0.0.4"
+version = "0.0.5"
 description = ""
 authors = ["Ruslan Shaiakhmetov <ruslan.shaiakhmetov@unibo.it>"]
 readme = "README.md"
