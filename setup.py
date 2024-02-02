@@ -1,7 +1,10 @@
 from setuptools import setup, find_packages
-import pkg_resources
 
-VERSION = pkg_resources.get_distribution('yasik').version
+with open("pyproject.toml", 'r') as infile:
+    for i in range(3):
+        line = infile.readline()
+    VERSION = line[11:-2]
+
 DESCRIPTION = 'Yasik language compiler'
 
 # Setting up
