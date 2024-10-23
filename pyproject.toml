@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "yasik"
-version = "0.0.6"
-description = ""
+version = "0.0.7"
+description = "This package content the YASIK domain-specific language source code."
 authors = ["Ruslan Shaiakhmetov <ruslan.shaiakhmetov@unibo.it>"]
 readme = "README.md"
 packages = [{include = "yasik"}]
