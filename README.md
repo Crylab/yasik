@@ -1,4 +1,5 @@
 # Yasik: Optimization Pipeline Integration for Racecar Simulation
+![Alt text](yasik_logo.png?raw=true "Title")
 ## Overview
 Yasik is a domain-specific language (DSL) designed to seamlessly connect optimization pipelines with racecar simulations. It provides a powerful and flexible interface to streamline the integration of optimization algorithms into the simulation environment, enabling efficient tuning and enhancement of racecar performance.
 ## Features
